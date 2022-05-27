@@ -17,7 +17,7 @@ contract coin_ico {
 
     // Checking if investor can buy coins
     modifier can_buy_coins(uint usd_invested) {
-        require (usd_invested * usd_to_coins + total_coins_bought);
+        require (usd_invested * usd_to_coins > total_coins_bought);
         _;
     }
 
@@ -27,16 +27,16 @@ contract coin_ico {
         require (equity_coins[investor] >= coins_to_sell);
     }*/
 
-    function equity_in_coins(address investor) external /*constant*/ returns (uint) {
+     function equity_in_coins(address investor) external view returns (uint) {
        return equity_coins[investor];
     }
 
-    function equity_in_usd(address investor) external /*constant*/ returns (uint) {
+     function equity_in_usd(address investor) external view returns (uint) {
        return equity_usd[investor];
     }
 
     // buying coins
-    function buy_coins(address investor, uint usd_invested) external 
+    function buy_coins(address investor, uint usd_invested) external
     can_buy_coins(usd_invested) {
         uint coins_bought = usd_invested * usd_to_coins;
         equity_coins[investor] += coins_bought;
@@ -45,8 +45,8 @@ contract coin_ico {
     }
 
     // Selling Hadcoins
-     function sell_coins(address investor, uint coins_sold) external 
-    // can_sell_coins(usd_invested) 
+    function sell_coins(address investor, uint coins_sold) external
+    // can_sell_coins(usd_invested)
     {
         equity_coins[investor] -= coins_sold;
         equity_usd[investor] = equity_coins[investor] / usd_to_coins;
